@@ -11,10 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download code
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: main
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -22,18 +20,31 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Check repository
         run: |
-          echo "=== CURRENT DIRECTORY ==="
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Check bot.py
+        run: |
+          echo "WORKSPACE:"
+          echo "$GITHUB_WORKSPACE"
+
+          echo "CURRENT DIRECTORY:"
           pwd
-          echo "=== FILES ==="
+
+          echo "FILES:"
           ls -la
-          echo "=== GIT FILES ==="
-          git ls-files
+
+          echo "CHECK BOT:"
+          ls -la "$GITHUB_WORKSPACE/bot.py"
 
       - name: Start bot
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-        run: python ./bot.py
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          echo "Starting bot from:"
+          pwd
+          echo "Running:"
+          ls -la bot.py
+          python -u bot.py
