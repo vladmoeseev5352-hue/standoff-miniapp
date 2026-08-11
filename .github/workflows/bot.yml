@@ -1,7 +1,9 @@
-
 name: Run Telegram Bot
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
