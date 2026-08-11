@@ -23,9 +23,27 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Find bot.py
-        run: find . -name "bot.py" -type f
+        run: |
+          echo "Current directory:"
+          pwd
+
+          echo "Files in repository:"
+          ls -la
+
+          echo "Searching for bot.py:"
+          find . -type f -name "bot.py"
 
       - name: Start bot
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-        run: python bot.py
+        run: |
+          BOT_FILE=$(find . -type f -name "bot.py" -print -quit)
+
+          if [ -z "$BOT_FILE" ]; then
+            echo "ERROR: bot.py not found!"
+            exit 1
+          fi
+
+          echo "Found bot: $BOT_FILE"
+          echo "Starting bot..."
+          python "$BOT_FILE"
