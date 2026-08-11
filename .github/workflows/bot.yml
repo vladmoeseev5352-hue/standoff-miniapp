@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Download code
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -22,28 +24,16 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Find bot.py
+      - name: Check repository
         run: |
-          echo "Current directory:"
+          echo "=== CURRENT DIRECTORY ==="
           pwd
-
-          echo "Files in repository:"
+          echo "=== FILES ==="
           ls -la
-
-          echo "Searching for bot.py:"
-          find . -type f -name "bot.py"
+          echo "=== GIT FILES ==="
+          git ls-files
 
       - name: Start bot
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-        run: |
-          BOT_FILE=$(find . -type f -name "bot.py" -print -quit)
-
-          if [ -z "$BOT_FILE" ]; then
-            echo "ERROR: bot.py not found!"
-            exit 1
-          fi
-
-          echo "Found bot: $BOT_FILE"
-          echo "Starting bot..."
-          python "$BOT_FILE"
+        run: python ./bot.py
