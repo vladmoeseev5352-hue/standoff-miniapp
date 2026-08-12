@@ -2,7 +2,10 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
 
     <title>STANDOFF MARKET</title>
 
@@ -11,371 +14,586 @@
     <style>
         * {
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            min-height: 100vh;
+            margin: 0;
             background:
-                radial-gradient(circle at top, #252044 0%, #0b0b12 55%, #050509 100%);
-            color: white;
-            padding: 20px;
+                radial-gradient(circle at 20% 0%, #24204a 0%, transparent 35%),
+                radial-gradient(circle at 100% 30%, #35144f 0%, transparent 35%),
+                #090911;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
         }
 
-        .container {
-            max-width: 500px;
-            margin: auto;
+        .app {
+            max-width: 520px;
+            margin: 0 auto;
+            padding: 18px 16px 35px;
         }
+
+        /* HEADER */
 
         .header {
-            text-align: center;
-            margin-top: 15px;
-            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
         }
 
         .logo {
-            width: 75px;
-            height: 75px;
-            margin: auto;
-            border-radius: 22px;
-            background: linear-gradient(135deg, #7c4dff, #b66cff);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #7b4dff, #b84dff);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 38px;
-            box-shadow: 0 10px 35px rgba(130, 70, 255, .35);
+            font-size: 23px;
+            box-shadow: 0 8px 25px rgba(135, 75, 255, 0.35);
         }
 
-        h1 {
-            margin-top: 15px;
-            font-size: 28px;
+        .logo-title {
+            font-size: 17px;
+            font-weight: 800;
         }
 
-        .subtitle {
-            color: #aaa7ba;
-            margin-top: 7px;
+        .logo-subtitle {
+            font-size: 11px;
+            color: #8d8d9d;
+            margin-top: 3px;
         }
 
         .balance {
-            margin: 20px 0;
-            padding: 18px;
-            border-radius: 20px;
-            background: rgba(255,255,255,.07);
-            border: 1px solid rgba(255,255,255,.08);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .balance-title {
-            color: #aaa7ba;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 10px 13px;
+            border-radius: 14px;
+            font-weight: 700;
             font-size: 14px;
         }
 
-        .balance-value {
-            margin-top: 4px;
-            font-size: 23px;
-            font-weight: bold;
-        }
+        /* WELCOME */
 
-        .buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
+        .welcome {
+            background: linear-gradient(
+                135deg,
+                rgba(116, 72, 255, 0.30),
+                rgba(184, 67, 255, 0.12)
+            );
 
-        button {
-            border: none;
-            color: white;
-            cursor: pointer;
-        }
-
-        .menu-btn {
-            padding: 18px 10px;
-            border-radius: 18px;
-            background: linear-gradient(145deg, #29263b, #1b1927);
-            border: 1px solid rgba(255,255,255,.07);
-            font-size: 16px;
-            transition: .2s;
-        }
-
-        .menu-btn:active {
-            transform: scale(.96);
-        }
-
-        .roulette {
-            margin-top: 25px;
+            border: 1px solid rgba(160,100,255,0.25);
+            border-radius: 24px;
             padding: 22px;
-            border-radius: 25px;
-            background: linear-gradient(145deg, #211d35, #111019);
-            border: 1px solid rgba(255,255,255,.08);
-            text-align: center;
+            margin-bottom: 18px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
         }
 
-        .roulette h2 {
-            font-size: 23px;
-            margin-bottom: 7px;
+        .welcome h1 {
+            margin: 0 0 8px;
+            font-size: 26px;
         }
 
-        .roulette-description {
-            color: #aaa7ba;
+        .welcome p {
+            margin: 0;
+            color: #b8b8c7;
+            line-height: 1.45;
             font-size: 14px;
+        }
+
+        /* NAV */
+
+        .nav {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
             margin-bottom: 20px;
         }
 
-        .wheel-wrapper {
-            position: relative;
-            width: 270px;
-            height: 270px;
-            margin: auto;
-        }
-
-        .pointer {
-            position: absolute;
-            z-index: 5;
-            top: -5px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 13px solid transparent;
-            border-right: 13px solid transparent;
-            border-top: 30px solid #ffffff;
-            filter: drop-shadow(0 3px 6px rgba(0,0,0,.6));
-        }
-
-        .wheel {
-            width: 270px;
-            height: 270px;
-            border-radius: 50%;
-            border: 8px solid #3b3655;
-            background: conic-gradient(
-                #ff4757 0deg 45deg,
-                #ffa502 45deg 90deg,
-                #2ed573 90deg 135deg,
-                #1e90ff 135deg 180deg,
-                #a55eea 180deg 225deg,
-                #ff6b81 225deg 270deg,
-                #eccc68 270deg 315deg,
-                #70a1ff 315deg 360deg
-            );
-            box-shadow:
-                0 0 30px rgba(138, 92, 246, .3),
-                inset 0 0 25px rgba(0,0,0,.45);
-            transition: transform 4s cubic-bezier(.12,.8,.15,1);
-        }
-
-        .spin-btn {
-            width: 100%;
-            margin-top: 20px;
-            padding: 17px;
+        .nav button {
+            border: 0;
+            color: white;
+            background: rgba(255,255,255,0.075);
+            border: 1px solid rgba(255,255,255,0.07);
             border-radius: 17px;
-            background: linear-gradient(135deg, #7c4dff, #a855f7);
-            font-size: 18px;
-            font-weight: bold;
-            box-shadow: 0 8px 25px rgba(124,77,255,.3);
+            padding: 17px 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
         }
 
-        .spin-btn:disabled {
-            opacity: .5;
+        .nav button:active {
+            transform: scale(0.97);
         }
 
-        .skins {
-            margin-top: 25px;
+        .nav .roulette {
+            background: linear-gradient(135deg, #713dff, #a13fff);
         }
 
-        .skins h2 {
+        /* SECTION */
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 12px;
         }
 
+        .section-title h2 {
+            margin: 0;
+            font-size: 19px;
+        }
+
+        .section-title span {
+            color: #8c8c9c;
+            font-size: 12px;
+        }
+
+        /* SKINS */
+
+        .skins {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 11px;
+        }
+
         .skin {
+            background: rgba(255,255,255,0.055);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 18px;
+            padding: 12px;
+        }
+
+        .skin-image {
+            height: 105px;
+            border-radius: 14px;
+            background:
+                radial-gradient(circle, rgba(145,75,255,0.35), transparent 55%),
+                #11111c;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 15px;
+            justify-content: center;
+            font-size: 43px;
             margin-bottom: 10px;
-            border-radius: 16px;
-            background: rgba(255,255,255,.06);
         }
 
         .skin-name {
-            font-weight: bold;
+            font-size: 14px;
+            font-weight: 700;
         }
 
-        .skin-price {
-            color: #8dff9d;
-            font-weight: bold;
+        .skin-type {
+            color: #8d8d9b;
+            font-size: 11px;
+            margin-top: 4px;
         }
 
-        .hidden {
+        .skin-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+        }
+
+        .price {
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .buy {
+            border: 0;
+            border-radius: 10px;
+            padding: 8px 11px;
+            background: #7b4dff;
+            color: white;
+            font-weight: 700;
+            font-size: 11px;
+        }
+
+        /* ROULETTE */
+
+        .roulette-box {
             display: none;
+            background: rgba(255,255,255,0.055);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 23px;
+            padding: 18px;
+            margin-top: 18px;
+            overflow: hidden;
+        }
+
+        .roulette-box.active {
+            display: block;
+        }
+
+        .roulette-title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .roulette-subtitle {
+            text-align: center;
+            color: #8f8f9d;
+            font-size: 12px;
+            margin-bottom: 18px;
+        }
+
+        .roulette-window {
+            position: relative;
+            overflow: hidden;
+            border-radius: 17px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: #0d0d16;
+        }
+
+        .roulette-pointer {
+            position: absolute;
+            z-index: 5;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 3px;
+            background: #a66bff;
+            box-shadow: 0 0 15px #9c58ff;
+            transform: translateX(-50%);
+        }
+
+        .roulette-track {
+            display: flex;
+            gap: 8px;
+            padding: 10px;
+            transform: translateX(0);
+        }
+
+        .roulette-item {
+            flex: 0 0 100px;
+            height: 100px;
+            border-radius: 14px;
+            background: #171722;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .roulette-item span {
+            font-size: 35px;
+            margin-bottom: 5px;
+        }
+
+        .spin {
+            width: 100%;
+            margin-top: 15px;
+            padding: 15px;
+            border: 0;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #7547ff, #b044ff);
+            color: white;
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .spin:active {
+            transform: scale(0.98);
         }
 
         .result {
-            margin-top: 15px;
-            padding: 15px;
-            border-radius: 15px;
-            background: rgba(124,77,255,.15);
-            color: #ddd5ff;
+            text-align: center;
+            margin-top: 14px;
+            color: #c7a7ff;
+            font-weight: 700;
+            min-height: 20px;
         }
 
-        @media (max-width: 380px) {
-            .buttons {
-                grid-template-columns: 1fr;
-            }
+        /* BOTTOM */
 
-            .wheel-wrapper,
-            .wheel {
-                width: 240px;
-                height: 240px;
-            }
+        .footer {
+            text-align: center;
+            color: #555563;
+            font-size: 11px;
+            margin-top: 30px;
         }
     </style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="app">
 
-    <div class="header">
-        <div class="logo">🎮</div>
+    <header class="header">
 
-        <h1>STANDOFF MARKET</h1>
+        <div class="logo">
 
-        <div class="subtitle">
-            Рынок скинов Standoff 2
-        </div>
-    </div>
+            <div class="logo-icon">
+                🎮
+            </div>
 
-    <div class="balance">
-        <div>
-            <div class="balance-title">Мой баланс</div>
-            <div class="balance-value" id="balance">650₽</div>
-        </div>
+            <div>
+                <div class="logo-title">
+                    STANDOFF MARKET
+                </div>
 
-        <div>💰</div>
-    </div>
-
-    <div class="buttons">
-
-        <button class="menu-btn" onclick="showShop()">
-            🛒<br>Магазин
-        </button>
-
-        <button class="menu-btn" onclick="showProfile()">
-            👤<br>Профиль
-        </button>
-
-        <button class="menu-btn" onclick="showPurchases()">
-            📦<br>Покупки
-        </button>
-
-        <button class="menu-btn" onclick="showSell()">
-            💸<br>Продать
-        </button>
-
-    </div>
-
-    <div class="roulette">
-
-        <h2>🎰 РУЛЕТКА</h2>
-
-        <div class="roulette-description">
-            Испытай удачу и получи случайный скин
-        </div>
-
-        <div class="wheel-wrapper">
-
-            <div class="pointer"></div>
-
-            <div
-                id="wheel"
-                class="wheel">
+                <div class="logo-subtitle">
+                    MARKET • SKINS • ROULETTE
+                </div>
             </div>
 
         </div>
 
-        <button
-            id="spinButton"
-            class="spin-btn"
-            onclick="spin()">
+        <div class="balance">
+            💰 650₽
+        </div>
 
-            🎰 КРУТИТЬ — 100₽
+    </header>
 
+
+    <section class="welcome">
+
+        <h1>
+            Добро пожаловать 👋
+        </h1>
+
+        <p>
+            Покупай скины, участвуй в рулетках
+            и собирай свою коллекцию.
+        </p>
+
+    </section>
+
+
+    <nav class="nav">
+
+        <button onclick="showMarket()">
+            🛒 Магазин
         </button>
 
-        <div
-            id="result"
-            class="result hidden">
-        </div>
+        <button onclick="showRoulette()" class="roulette">
+            🎰 Рулетка
+        </button>
 
-    </div>
+        <button onclick="showProfile()">
+            👤 Профиль
+        </button>
 
-    <div id="shop" class="skins hidden">
+        <button onclick="showPurchases()">
+            📦 Покупки
+        </button>
 
-        <h2>🛒 Магазин</h2>
+    </nav>
 
-        <div class="skin">
-            <span class="skin-name">🔥 AKR12 — Dragon</span>
-            <span class="skin-price">350₽</span>
-        </div>
 
-        <div class="skin">
-            <span class="skin-name">💎 M4A1 — Crystal</span>
-            <span class="skin-price">500₽</span>
-        </div>
+    <section id="market">
 
-        <div class="skin">
-            <span class="skin-name">⚡ USP — Cyber</span>
-            <span class="skin-price">250₽</span>
-        </div>
+        <div class="section-title">
 
-        <div class="skin">
-            <span class="skin-name">🌌 AWM — Galaxy</span>
-            <span class="skin-price">750₽</span>
-        </div>
+            <h2>
+                🔥 Популярные скины
+            </h2>
 
-    </div>
-
-    <div id="profile" class="skins hidden">
-
-        <h2>👤 Профиль</h2>
-
-        <div class="skin">
-            <span>ID пользователя</span>
-            <span id="telegramId">—</span>
-        </div>
-
-        <div class="skin">
-            <span>Имя</span>
-            <span id="telegramName">—</span>
-        </div>
-
-    </div>
-
-    <div id="purchases" class="skins hidden">
-
-        <h2>📦 Мои покупки</h2>
-
-        <div class="skin">
-            <span>Покупок пока нет</span>
-            <span>📦</span>
-        </div>
-
-    </div>
-
-    <div id="sell" class="skins hidden">
-
-        <h2>💸 Продать скин</h2>
-
-        <div class="skin">
             <span>
-                Выставление скинов добавим следующим этапом.
+                Все →
             </span>
+
         </div>
 
+
+        <div class="skins">
+
+            <div class="skin">
+
+                <div class="skin-image">
+                    🔥
+                </div>
+
+                <div class="skin-name">
+                    AKR12 Dragon
+                </div>
+
+                <div class="skin-type">
+                    Legendary
+                </div>
+
+                <div class="skin-bottom">
+
+                    <div class="price">
+                        350₽
+                    </div>
+
+                    <button class="buy">
+                        Купить
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="skin">
+
+                <div class="skin-image">
+                    💎
+                </div>
+
+                <div class="skin-name">
+                    M4A1 Crystal
+                </div>
+
+                <div class="skin-type">
+                    Epic
+                </div>
+
+                <div class="skin-bottom">
+
+                    <div class="price">
+                        500₽
+                    </div>
+
+                    <button class="buy">
+                        Купить
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="skin">
+
+                <div class="skin-image">
+                    ⚡
+                </div>
+
+                <div class="skin-name">
+                    USP Cyber
+                </div>
+
+                <div class="skin-type">
+                    Rare
+                </div>
+
+                <div class="skin-bottom">
+
+                    <div class="price">
+                        250₽
+                    </div>
+
+                    <button class="buy">
+                        Купить
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="skin">
+
+                <div class="skin-image">
+                    🌌
+                </div>
+
+                <div class="skin-name">
+                    AWM Galaxy
+                </div>
+
+                <div class="skin-type">
+                    Legendary
+                </div>
+
+                <div class="skin-bottom">
+
+                    <div class="price">
+                        750₽
+                    </div>
+
+                    <button class="buy">
+                        Купить
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section id="roulette" class="roulette-box">
+
+        <div class="roulette-title">
+            🎰 STANDOFF ROULETTE
+        </div>
+
+        <div class="roulette-subtitle">
+            Испытай удачу и получи случайный скин
+        </div>
+
+
+        <div class="roulette-window">
+
+            <div class="roulette-pointer"></div>
+
+            <div id="rouletteTrack" class="roulette-track">
+
+                <div class="roulette-item">
+                    <span>🔫</span>
+                    USP
+                </div>
+
+                <div class="roulette-item">
+                    <span>⚡</span>
+                    AKR12
+                </div>
+
+                <div class="roulette-item">
+                    <span>💎</span>
+                    M4A1
+                </div>
+
+                <div class="roulette-item">
+                    <span>🌌</span>
+                    AWM
+                </div>
+
+                <div class="roulette-item">
+                    <span>🔥</span>
+                    Dragon
+                </div>
+
+                <div class="roulette-item">
+                    <span>👑</span>
+                    Golden
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <button class="spin" onclick="spinRoulette()">
+            🎰 КРУТИТЬ — 100₽
+        </button>
+
+        <div id="result" class="result"></div>
+
+    </section>
+
+
+    <div class="footer">
+        STANDOFF MARKET © 2026
     </div>
 
 </div>
@@ -389,175 +607,96 @@
     tg.expand();
 
 
-    let balance = 650;
-
-    let rotation = 0;
-
-    const skins = [
-        "🔥 AKR12 — Dragon",
-        "💎 M4A1 — Crystal",
-        "⚡ USP — Cyber",
-        "🌌 AWM — Galaxy",
-        "🟣 Desert Eagle — Purple",
-        "🔴 M4 — Redline",
-        "🟡 AKR — Gold",
-        "🔵 AWM — Ice"
-    ];
-
-
-    function updateBalance() {
-
-        document.getElementById("balance").textContent =
-            balance + "₽";
-
-    }
-
-
-    function hideSections() {
+    function showRoulette() {
 
         document
-            .querySelectorAll(".skins")
-            .forEach(element => {
-                element.classList.add("hidden");
+            .getElementById("roulette")
+            .classList.add("active");
+
+        document
+            .getElementById("roulette")
+            .scrollIntoView({
+                behavior: "smooth"
             });
-
     }
 
 
-    function showShop() {
-
-        hideSections();
+    function showMarket() {
 
         document
-            .getElementById("shop")
-            .classList.remove("hidden");
+            .getElementById("market")
+            .scrollIntoView({
+                behavior: "smooth"
+            });
 
     }
 
 
     function showProfile() {
 
-        hideSections();
-
-        document
-            .getElementById("profile")
-            .classList.remove("hidden");
-
-        if (tg.initDataUnsafe &&
-            tg.initDataUnsafe.user) {
-
-            const user =
-                tg.initDataUnsafe.user;
-
-            document.getElementById("telegramId")
-                .textContent = user.id;
-
-            document.getElementById("telegramName")
-                .textContent =
-                user.first_name || "Пользователь";
-
-        }
+        tg.showAlert(
+            "👤 Профиль\n\nБаланс: 650₽\n\nРаздел профиля подключим следующим этапом."
+        );
 
     }
 
 
     function showPurchases() {
 
-        hideSections();
-
-        document
-            .getElementById("purchases")
-            .classList.remove("hidden");
+        tg.showAlert(
+            "📦 Покупки\n\nЗдесь будут отображаться купленные скины."
+        );
 
     }
 
 
-    function showSell() {
+    function spinRoulette() {
 
-        hideSections();
-
-        document
-            .getElementById("sell")
-            .classList.remove("hidden");
-
-    }
-
-
-    function spin() {
-
-        if (balance < 100) {
-
-            showResult(
-                "❌ Недостаточно средств."
-            );
-
-            return;
-
-        }
-
-
-        const button =
-            document.getElementById("spinButton");
-
-        button.disabled = true;
-
-
-        balance -= 100;
-
-        updateBalance();
-
-
-        const randomSkin =
-            skins[
-                Math.floor(
-                    Math.random() * skins.length
-                )
-            ];
-
-
-        const extraRotation =
-            1440 +
-            Math.floor(
-                Math.random() * 360
-            );
-
-
-        rotation += extraRotation;
-
-
-        document
-            .getElementById("wheel")
-            .style.transform =
-            `rotate(${rotation}deg)`;
-
-
-        setTimeout(() => {
-
-            showResult(
-                "🎉 Тебе выпал:\n\n" +
-                randomSkin
-            );
-
-            button.disabled = false;
-
-        }, 4200);
-
-    }
-
-
-    function showResult(text) {
+        const track =
+            document.getElementById("rouletteTrack");
 
         const result =
             document.getElementById("result");
 
-        result.textContent = text;
+        const items =
+            track.children;
 
-        result.classList.remove("hidden");
+        const random =
+            Math.floor(
+                Math.random() * items.length
+            );
+
+        const position =
+            -(random * 108);
+
+        track.style.transition =
+            "transform 3s cubic-bezier(.15,.8,.2,1)";
+
+        track.style.transform =
+            "translateX(" + position + "px)";
+
+        result.innerText =
+            "🎰 Рулетка крутится...";
+
+        setTimeout(() => {
+
+            const names = [
+                "USP",
+                "AKR12",
+                "M4A1",
+                "AWM",
+                "Dragon",
+                "Golden"
+            ];
+
+            result.innerText =
+                "🎉 Ты выиграл: " +
+                names[random] +
+                "!";
+
+        }, 3100);
 
     }
-
-
-    updateBalance();
 
 </script>
 
