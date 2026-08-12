@@ -19,6 +19,13 @@ dp = Dispatcher()
 
 
 # =========================
+# НАСТРОЙКА MINI APP
+# =========================
+
+WEB_APP_URL = "https://vladmoeseev5352-hue.github.io/standoff-miniapp/"
+
+
+# =========================
 # БАЗА ДАННЫХ
 # =========================
 
@@ -63,40 +70,17 @@ def get_balance(user_id: int):
 
 
 # =========================
-# СКИНЫ
-# =========================
-
-SKINS = [
-    {
-        "id": 1,
-        "name": "🔥 AKR12 — Dragon",
-        "price": 350
-    },
-    {
-        "id": 2,
-        "name": "💎 M4A1 — Crystal",
-        "price": 500
-    },
-    {
-        "id": 3,
-        "name": "⚡ USP — Cyber",
-        "price": 250
-    },
-    {
-        "id": 4,
-        "name": "🌌 AWM — Galaxy",
-        "price": 750
-    }
-]
-
-
-# =========================
 # ГЛАВНОЕ МЕНЮ
 # =========================
 
 def main_menu():
 
     keyboard = InlineKeyboardBuilder()
+
+    keyboard.button(
+        text="🎰 Открыть STANDOFF MARKET",
+        web_app={"url": WEB_APP_URL}
+    )
 
     keyboard.button(
         text="🛒 Магазин",
@@ -128,7 +112,7 @@ def main_menu():
         callback_data="support"
     )
 
-    keyboard.adjust(2, 2, 2)
+    keyboard.adjust(1, 2, 2, 2)
 
     return keyboard.as_markup()
 
@@ -150,31 +134,6 @@ def back_button():
 
 
 # =========================
-# КНОПКИ МАГАЗИНА
-# =========================
-
-def shop_keyboard():
-
-    keyboard = InlineKeyboardBuilder()
-
-    for skin in SKINS:
-
-        keyboard.button(
-            text=f"{skin['name']} — {skin['price']}₽",
-            callback_data=f"skin:{skin['id']}"
-        )
-
-    keyboard.button(
-        text="⬅️ Главное меню",
-        callback_data="home"
-    )
-
-    keyboard.adjust(1)
-
-    return keyboard.as_markup()
-
-
-# =========================
 # /START
 # =========================
 
@@ -186,8 +145,9 @@ async def start(message: Message):
     await message.answer(
         "🎮 <b>STANDOFF MARKET</b>\n\n"
         "Добро пожаловать на наш рынок скинов!\n\n"
-        "💰 На старте тебе начислено 1000₽.\n\n"
-        "Выбери нужный раздел 👇",
+        "🎰 Открой Mini App, чтобы посмотреть "
+        "рулетку и магазин.\n\n"
+        "💰 Стартовый баланс: 1000₽",
         reply_markup=main_menu(),
         parse_mode="HTML"
     )
@@ -218,115 +178,14 @@ async def home(callback: CallbackQuery):
 async def shop(callback: CallbackQuery):
 
     await callback.message.edit_text(
-        "🛒 <b>МАГАЗИН STANDOFF MARKET</b>\n\n"
-        "Выбери скин:",
-        reply_markup=shop_keyboard(),
+        "🛒 <b>МАГАЗИН</b>\n\n"
+        "🎰 Для полноценного магазина "
+        "открой Mini App.",
+        reply_markup=main_menu(),
         parse_mode="HTML"
     )
 
     await callback.answer()
-
-
-# =========================
-# КАРТОЧКА СКИНА
-# =========================
-
-@dp.callback_query(F.data.startswith("skin:"))
-async def skin(callback: CallbackQuery):
-
-    skin_id = int(callback.data.split(":")[1])
-
-    skin = next(
-        skin for skin in SKINS
-        if skin["id"] == skin_id
-    )
-
-    keyboard = InlineKeyboardBuilder()
-
-    keyboard.button(
-        text=f"🛒 Купить за {skin['price']}₽",
-        callback_data=f"buy:{skin['id']}"
-    )
-
-    keyboard.button(
-        text="⬅️ Назад в магазин",
-        callback_data="shop"
-    )
-
-    keyboard.adjust(1)
-
-    await callback.message.edit_text(
-        f"🎨 <b>{skin['name']}</b>\n\n"
-        f"💰 Цена: <b>{skin['price']}₽</b>\n\n"
-        "Нажми кнопку ниже, чтобы купить этот скин.",
-        reply_markup=keyboard.as_markup(),
-        parse_mode="HTML"
-    )
-
-    await callback.answer()
-
-
-# =========================
-# ПОКУПКА
-# =========================
-
-@dp.callback_query(F.data.startswith("buy:"))
-async def buy(callback: CallbackQuery):
-
-    user_id = callback.from_user.id
-
-    create_user(user_id)
-
-    skin_id = int(callback.data.split(":")[1])
-
-    skin = next(
-        skin for skin in SKINS
-        if skin["id"] == skin_id
-    )
-
-    balance = get_balance(user_id)
-
-    if balance < skin["price"]:
-
-        await callback.answer(
-            "❌ Недостаточно денег!",
-            show_alert=True
-        )
-
-        return
-
-    new_balance = balance - skin["price"]
-
-    db.execute(
-        "UPDATE users SET balance = ? WHERE user_id = ?",
-        (new_balance, user_id)
-    )
-
-    db.execute(
-        """
-        INSERT INTO purchases
-        (user_id, skin_name, price)
-        VALUES (?, ?, ?)
-        """,
-        (
-            user_id,
-            skin["name"],
-            skin["price"]
-        )
-    )
-
-    db.commit()
-
-    await callback.message.edit_text(
-        "✅ <b>ПОКУПКА УСПЕШНА!</b>\n\n"
-        f"🎨 {skin['name']}\n"
-        f"💰 Потрачено: {skin['price']}₽\n"
-        f"💳 Новый баланс: {new_balance}₽",
-        reply_markup=back_button(),
-        parse_mode="HTML"
-    )
-
-    await callback.answer("Покупка совершена! 🎉")
 
 
 # =========================
@@ -358,13 +217,13 @@ async def profile(callback: CallbackQuery):
     create_user(callback.from_user.id)
 
     user = callback.from_user
-    balance = get_balance(user.id)
+    value = get_balance(user.id)
 
     await callback.message.edit_text(
         "👤 <b>МОЙ ПРОФИЛЬ</b>\n\n"
         f"🆔 ID: <code>{user.id}</code>\n"
         f"👤 Имя: {user.full_name}\n"
-        f"💰 Баланс: {balance}₽",
+        f"💰 Баланс: {value}₽",
         reply_markup=back_button(),
         parse_mode="HTML"
     )
@@ -373,7 +232,7 @@ async def profile(callback: CallbackQuery):
 
 
 # =========================
-# МОИ ПОКУПКИ
+# ПОКУПКИ
 # =========================
 
 @dp.callback_query(F.data == "purchases")
@@ -401,7 +260,6 @@ async def purchases(callback: CallbackQuery):
         items = []
 
         for skin_name, price in rows:
-
             items.append(
                 f"🎨 {skin_name} — {price}₽"
             )
@@ -429,9 +287,7 @@ async def sell(callback: CallbackQuery):
 
     await callback.message.edit_text(
         "💸 <b>ПРОДАЖА СКИНА</b>\n\n"
-        "Этот раздел сделаем следующим этапом.\n\n"
-        "Здесь пользователи смогут выставлять "
-        "свои скины на продажу.",
+        "Раздел находится в разработке.",
         reply_markup=back_button(),
         parse_mode="HTML"
     )
@@ -448,8 +304,7 @@ async def support(callback: CallbackQuery):
 
     await callback.message.edit_text(
         "🆘 <b>ПОДДЕРЖКА</b>\n\n"
-        "По вопросам работы магазина "
-        "обращайтесь к администратору.",
+        "Раздел находится в разработке.",
         reply_markup=back_button(),
         parse_mode="HTML"
     )
