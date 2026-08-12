@@ -1,1 +1,406 @@
 
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
+
+    <title>STANDOFF MARKET</title>
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            background:
+                radial-gradient(circle at 50% 0%, #303044 0%, #171722 38%, #09090f 100%);
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            min-height: 100vh;
+        }
+
+        .app {
+            max-width: 520px;
+            margin: 0 auto;
+            padding: 18px 16px 100px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: .5px;
+        }
+
+        .logo span {
+            color: #9d7cff;
+        }
+
+        .balance {
+            background: rgba(255,255,255,.08);
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 18px;
+            padding: 9px 13px;
+            font-weight: 700;
+        }
+
+        .balance small {
+            color: #aaaabb;
+            font-weight: 500;
+        }
+
+        .hero {
+            background:
+                linear-gradient(145deg, #302b49, #171622);
+            border-radius: 28px;
+            padding: 25px 20px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,.08);
+            box-shadow: 0 15px 45px rgba(0,0,0,.35);
+        }
+
+        .hero-title {
+            font-size: 28px;
+            font-weight: 850;
+            margin-bottom: 7px;
+        }
+
+        .hero-subtitle {
+            color: #aaa8ba;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .roulette {
+            position: relative;
+            height: 125px;
+            overflow: hidden;
+            border-radius: 22px;
+            background: #0e0e16;
+            border: 1px solid #353544;
+            display: flex;
+            align-items: center;
+        }
+
+        .roulette::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background: #a47cff;
+            box-shadow: 0 0 18px #a47cff;
+            z-index: 5;
+        }
+
+        .items {
+            display: flex;
+            gap: 10px;
+            padding: 0 15px;
+            transform: translateX(-30px);
+        }
+
+        .skin {
+            flex: 0 0 92px;
+            height: 92px;
+            border-radius: 18px;
+            background: linear-gradient(145deg, #292936, #171720);
+            border: 1px solid #3c3c4c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .skin-icon {
+            font-size: 35px;
+            margin-bottom: 5px;
+        }
+
+        .skin-name {
+            font-size: 10px;
+            color: #b9b8c6;
+        }
+
+        .spin-button {
+            width: 100%;
+            border: 0;
+            margin-top: 20px;
+            padding: 17px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #9d7cff, #7654e8);
+            color: white;
+            font-size: 17px;
+            font-weight: 800;
+            box-shadow: 0 10px 25px rgba(125,86,232,.35);
+        }
+
+        .spin-button:active {
+            transform: scale(.98);
+        }
+
+        .section-title {
+            margin: 25px 4px 13px;
+            font-size: 19px;
+            font-weight: 800;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .card {
+            background: rgba(255,255,255,.065);
+            border: 1px solid rgba(255,255,255,.07);
+            border-radius: 20px;
+            padding: 17px;
+        }
+
+        .card-icon {
+            font-size: 30px;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            font-weight: 750;
+            margin-bottom: 5px;
+        }
+
+        .card-text {
+            font-size: 12px;
+            color: #9897a7;
+        }
+
+        .bottom {
+            position: fixed;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 24px);
+            max-width: 496px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 7px;
+            padding: 7px;
+            background: rgba(27,27,38,.94);
+            backdrop-filter: blur(18px);
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 23px;
+        }
+
+        .nav-button {
+            border: 0;
+            background: transparent;
+            color: #8e8d9c;
+            padding: 9px 4px;
+            border-radius: 16px;
+            font-size: 11px;
+        }
+
+        .nav-button.active {
+            background: #393449;
+            color: white;
+        }
+
+        .nav-icon {
+            display: block;
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+
+        @media (max-width: 360px) {
+            .hero-title {
+                font-size: 24px;
+            }
+
+            .skin {
+                flex-basis: 82px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <div class="header">
+        <div class="logo">
+            STANDOFF <span>MARKET</span>
+        </div>
+
+        <div class="balance">
+            💰 <span id="balance">650</span>
+            <small>₽</small>
+        </div>
+    </div>
+
+    <section class="hero">
+
+        <div class="hero-title">
+            🎰 РУЛЕТКА
+        </div>
+
+        <div class="hero-subtitle">
+            Испытай удачу и получи скин
+        </div>
+
+        <div class="roulette">
+            <div class="items" id="items">
+
+                <div class="skin">
+                    <div class="skin-icon">🔫</div>
+                    <div class="skin-name">AKR12</div>
+                </div>
+
+                <div class="skin">
+                    <div class="skin-icon">💎</div>
+                    <div class="skin-name">M4A1</div>
+                </div>
+
+                <div class="skin">
+                    <div class="skin-icon">⚡</div>
+                    <div class="skin-name">USP</div>
+                </div>
+
+                <div class="skin">
+                    <div class="skin-icon">🌌</div>
+                    <div class="skin-name">AWM</div>
+                </div>
+
+                <div class="skin">
+                    <div class="skin-icon">🔥</div>
+                    <div class="skin-name">M4</div>
+                </div>
+
+                <div class="skin">
+                    <div class="skin-icon">👑</div>
+                    <div class="skin-name">DRAGON</div>
+                </div>
+
+            </div>
+        </div>
+
+        <button class="spin-button" onclick="spin()">
+            🎰 КРУТИТЬ — 25 ₽
+        </button>
+
+    </section>
+
+    <div class="section-title">
+        Быстрый доступ
+    </div>
+
+    <div class="cards">
+
+        <div class="card">
+            <div class="card-icon">🛒</div>
+            <div class="card-title">Магазин</div>
+            <div class="card-text">
+                Покупай доступные скины
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">🎒</div>
+            <div class="card-title">Инвентарь</div>
+            <div class="card-text">
+                Твои полученные предметы
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">👤</div>
+            <div class="card-title">Профиль</div>
+            <div class="card-text">
+                Баланс и информация
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">💸</div>
+            <div class="card-title">Продать</div>
+            <div class="card-text">
+                Выставляй скины на продажу
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="bottom">
+
+    <button class="nav-button active">
+        <span class="nav-icon">🎰</span>
+        Рулетка
+    </button>
+
+    <button class="nav-button">
+        <span class="nav-icon">🛒</span>
+        Магазин
+    </button>
+
+    <button class="nav-button">
+        <span class="nav-icon">👤</span>
+        Профиль
+    </button>
+
+</div>
+
+<script>
+
+    const tg = window.Telegram.WebApp;
+
+    tg.ready();
+    tg.expand();
+
+    let balance = 650;
+
+    function spin() {
+
+        if (balance < 25) {
+            tg.showAlert("Недостаточно средств!");
+            return;
+        }
+
+        balance -= 25;
+
+        document.getElementById("balance").textContent = balance;
+
+        const items = document.getElementById("items");
+
+        items.style.transition = "transform 3s cubic-bezier(.12,.72,.16,1)";
+        items.style.transform = "translateX(-500px)";
+
+        setTimeout(() => {
+
+            items.style.transition = "none";
+            items.style.transform = "translateX(-30px)";
+
+            tg.showAlert("🎉 Поздравляем! Ты выиграл скин!");
+
+        }, 3000);
+    }
+
+</script>
+
+</body>
+</html>
