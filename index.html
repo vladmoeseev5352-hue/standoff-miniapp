@@ -28,13 +28,16 @@
             min-height: 100vh;
         }
 
+        button {
+            font-family: Arial, sans-serif;
+            cursor: pointer;
+        }
+
         .app {
             max-width: 520px;
             margin: 0 auto;
             padding: 18px 16px 35px;
         }
-
-        /* HEADER */
 
         .header {
             display: flex;
@@ -81,8 +84,6 @@
             font-size: 14px;
         }
 
-        /* WELCOME */
-
         .welcome {
             background: linear-gradient(
                 135deg,
@@ -109,8 +110,6 @@
             font-size: 14px;
         }
 
-        /* NAV */
-
         .nav {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -127,7 +126,6 @@
             padding: 17px 10px;
             font-size: 14px;
             font-weight: 700;
-            cursor: pointer;
         }
 
         .nav button:active {
@@ -137,8 +135,6 @@
         .nav .roulette {
             background: linear-gradient(135deg, #713dff, #a13fff);
         }
-
-        /* SECTION */
 
         .section-title {
             display: flex;
@@ -156,8 +152,6 @@
             color: #8c8c9c;
             font-size: 12px;
         }
-
-        /* SKINS */
 
         .skins {
             display: grid;
@@ -218,8 +212,6 @@
             font-size: 11px;
         }
 
-        /* ROULETTE */
-
         .roulette-box {
             display: none;
             background: rgba(255,255,255,0.055);
@@ -273,6 +265,7 @@
             gap: 8px;
             padding: 10px;
             transform: translateX(0);
+            will-change: transform;
         }
 
         .roulette-item {
@@ -286,6 +279,7 @@
             justify-content: center;
             font-size: 12px;
             font-weight: 700;
+            border: 1px solid rgba(255,255,255,0.06);
         }
 
         .roulette-item span {
@@ -305,6 +299,10 @@
             font-weight: 800;
         }
 
+        .spin:disabled {
+            opacity: 0.5;
+        }
+
         .spin:active {
             transform: scale(0.98);
         }
@@ -315,9 +313,8 @@
             color: #c7a7ff;
             font-weight: 700;
             min-height: 20px;
+            line-height: 1.4;
         }
-
-        /* BOTTOM */
 
         .footer {
             text-align: center;
@@ -352,8 +349,8 @@
 
         </div>
 
-        <div class="balance">
-            💰 650₽
+        <div class="balance" id="balance">
+            🪙 650
         </div>
 
     </header>
@@ -428,10 +425,13 @@
                 <div class="skin-bottom">
 
                     <div class="price">
-                        350₽
+                        🪙 350
                     </div>
 
-                    <button class="buy">
+                    <button
+                        class="buy"
+                        onclick="buySkin('AKR12 Dragon', 350)"
+                    >
                         Купить
                     </button>
 
@@ -457,10 +457,13 @@
                 <div class="skin-bottom">
 
                     <div class="price">
-                        500₽
+                        🪙 500
                     </div>
 
-                    <button class="buy">
+                    <button
+                        class="buy"
+                        onclick="buySkin('M4A1 Crystal', 500)"
+                    >
                         Купить
                     </button>
 
@@ -486,10 +489,13 @@
                 <div class="skin-bottom">
 
                     <div class="price">
-                        250₽
+                        🪙 250
                     </div>
 
-                    <button class="buy">
+                    <button
+                        class="buy"
+                        onclick="buySkin('USP Cyber', 250)"
+                    >
                         Купить
                     </button>
 
@@ -515,10 +521,13 @@
                 <div class="skin-bottom">
 
                     <div class="price">
-                        750₽
+                        🪙 750
                     </div>
 
-                    <button class="buy">
+                    <button
+                        class="buy"
+                        onclick="buySkin('AWM Galaxy', 750)"
+                    >
                         Купить
                     </button>
 
@@ -546,48 +555,26 @@
 
             <div class="roulette-pointer"></div>
 
-            <div id="rouletteTrack" class="roulette-track">
-
-                <div class="roulette-item">
-                    <span>🔫</span>
-                    USP
-                </div>
-
-                <div class="roulette-item">
-                    <span>⚡</span>
-                    AKR12
-                </div>
-
-                <div class="roulette-item">
-                    <span>💎</span>
-                    M4A1
-                </div>
-
-                <div class="roulette-item">
-                    <span>🌌</span>
-                    AWM
-                </div>
-
-                <div class="roulette-item">
-                    <span>🔥</span>
-                    Dragon
-                </div>
-
-                <div class="roulette-item">
-                    <span>👑</span>
-                    Golden
-                </div>
-
-            </div>
+            <div
+                id="rouletteTrack"
+                class="roulette-track"
+            ></div>
 
         </div>
 
 
-        <button class="spin" onclick="spinRoulette()">
-            🎰 КРУТИТЬ — 100₽
+        <button
+            id="spinButton"
+            class="spin"
+            onclick="spinRoulette()"
+        >
+            🎰 КРУТИТЬ — 30 🪙
         </button>
 
-        <div id="result" class="result"></div>
+        <div
+            id="result"
+            class="result"
+        ></div>
 
     </section>
 
@@ -601,30 +588,368 @@
 
 <script>
 
-    const tg = window.Telegram.WebApp;
+    const tg =
+        window.Telegram.WebApp;
 
     tg.ready();
     tg.expand();
 
 
+    // =========================
+    // ТЕСТОВЫЙ БАЛАНС
+    // =========================
+
+    let balance = 650;
+
+
+    function updateBalance() {
+
+        document.getElementById(
+            "balance"
+        ).innerText =
+            "🪙 " + balance;
+
+    }
+
+
+    // =========================
+    // СКИНЫ РУЛЕТКИ
+    // =========================
+
+    const rouletteSkins = [
+
+        {
+            name: "USP Cyber",
+            icon: "⚡",
+            chance: 35
+        },
+
+        {
+            name: "AKR12 Dragon",
+            icon: "🔥",
+            chance: 25
+        },
+
+        {
+            name: "M4A1 Crystal",
+            icon: "💎",
+            chance: 20
+        },
+
+        {
+            name: "AWM Galaxy",
+            icon: "🌌",
+            chance: 12
+        },
+
+        {
+            name: "Golden",
+            icon: "👑",
+            chance: 6
+        },
+
+        {
+            name: "Dragon",
+            icon: "🐉",
+            chance: 2
+        }
+
+    ];
+
+
+    const track =
+        document.getElementById(
+            "rouletteTrack"
+        );
+
+
+    function createRoulette() {
+
+        track.innerHTML = "";
+
+        for (
+            let i = 0;
+            i < 40;
+            i++
+        ) {
+
+            const skin =
+                rouletteSkins[
+                    i %
+                    rouletteSkins.length
+                ];
+
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            item.className =
+                "roulette-item";
+
+
+            item.innerHTML =
+                "<span>" +
+                skin.icon +
+                "</span>" +
+                skin.name;
+
+
+            track.appendChild(item);
+
+        }
+
+    }
+
+
+    createRoulette();
+
+
+    // =========================
+    // ВЫБОР ПО ШАНСУ
+    // =========================
+
+    function getRandomSkin() {
+
+        const total =
+            rouletteSkins.reduce(
+                (
+                    sum,
+                    skin
+                ) =>
+                    sum +
+                    skin.chance,
+                0
+            );
+
+
+        let random =
+            Math.random() *
+            total;
+
+
+        for (
+            const skin
+            of rouletteSkins
+        ) {
+
+            random -=
+                skin.chance;
+
+
+            if (
+                random <= 0
+            ) {
+
+                return skin;
+
+            }
+
+        }
+
+
+        return rouletteSkins[0];
+
+    }
+
+
+    let spinning = false;
+
+
+    // =========================
+    // РУЛЕТКА
+    // =========================
+
+    function spinRoulette() {
+
+        if (spinning) {
+            return;
+        }
+
+
+        const price = 30;
+
+
+        if (
+            balance <
+            price
+        ) {
+
+            tg.showAlert(
+                "❌ Недостаточно токенов!\n\n" +
+                "Для рулетки нужно 30 🪙.\n" +
+                "Твой баланс: " +
+                balance +
+                " 🪙."
+            );
+
+            return;
+
+        }
+
+
+        spinning = true;
+
+
+        const button =
+            document.getElementById(
+                "spinButton"
+            );
+
+
+        const result =
+            document.getElementById(
+                "result"
+            );
+
+
+        button.disabled = true;
+
+
+        balance -= price;
+
+        updateBalance();
+
+
+        result.innerText =
+            "🎰 Рулетка крутится...";
+
+
+        const winningSkin =
+            getRandomSkin();
+
+
+        const matchingItems =
+            Array.from(
+                track.children
+            ).filter(
+                item =>
+                    item.innerText ===
+                    winningSkin.name
+            );
+
+
+        const target =
+            matchingItems[
+                Math.floor(
+                    Math.random() *
+                    matchingItems.length
+                )
+            ];
+
+
+        const targetIndex =
+            Array.from(
+                track.children
+            ).indexOf(
+                target
+            );
+
+
+        const itemWidth = 108;
+
+
+        const windowElement =
+            document.querySelector(
+                ".roulette-window"
+            );
+
+
+        const center =
+            windowElement.offsetWidth /
+            2;
+
+
+        const targetCenter =
+            targetIndex *
+            itemWidth +
+            50;
+
+
+        const finalPosition =
+            center -
+            targetCenter;
+
+
+        track.style.transition =
+            "transform 4.5s cubic-bezier(.12,.75,.18,1)";
+
+
+        track.style.transform =
+            "translateX(" +
+            finalPosition +
+            "px)";
+
+
+        setTimeout(
+            () => {
+
+                result.innerHTML =
+                    "🎉 Ты выиграл:<br>" +
+                    winningSkin.icon +
+                    " <b>" +
+                    winningSkin.name +
+                    "</b>";
+
+
+                button.disabled =
+                    false;
+
+
+                spinning =
+                    false;
+
+
+                if (
+                    tg.HapticFeedback
+                ) {
+
+                    tg.HapticFeedback
+                        .notificationOccurred(
+                            "success"
+                        );
+
+                }
+
+            },
+            4700
+        );
+
+    }
+
+
+    // =========================
+    // МЕНЮ
+    // =========================
+
     function showRoulette() {
 
-        document
-            .getElementById("roulette")
-            .classList.add("active");
+        const roulette =
+            document.getElementById(
+                "roulette"
+            );
 
-        document
-            .getElementById("roulette")
-            .scrollIntoView({
-                behavior: "smooth"
-            });
+
+        roulette.classList.add(
+            "active"
+        );
+
+
+        roulette.scrollIntoView({
+            behavior: "smooth"
+        });
+
     }
 
 
     function showMarket() {
 
         document
-            .getElementById("market")
+            .getElementById(
+                "market"
+            )
             .scrollIntoView({
                 behavior: "smooth"
             });
@@ -635,7 +960,11 @@
     function showProfile() {
 
         tg.showAlert(
-            "👤 Профиль\n\nБаланс: 650₽\n\nРаздел профиля подключим следующим этапом."
+            "👤 Профиль\n\n" +
+            "🪙 Баланс: " +
+            balance +
+            "\n\n" +
+            "Профиль подключим к Telegram на следующем этапе."
         );
 
     }
@@ -644,59 +973,62 @@
     function showPurchases() {
 
         tg.showAlert(
-            "📦 Покупки\n\nЗдесь будут отображаться купленные скины."
+            "📦 Покупки\n\n" +
+            "Здесь будут отображаться купленные скины."
         );
 
     }
 
 
-    function spinRoulette() {
+    // =========================
+    // ПОКУПКА
+    // =========================
 
-        const track =
-            document.getElementById("rouletteTrack");
+    function buySkin(
+        name,
+        price
+    ) {
 
-        const result =
-            document.getElementById("result");
+        if (
+            balance <
+            price
+        ) {
 
-        const items =
-            track.children;
-
-        const random =
-            Math.floor(
-                Math.random() * items.length
+            tg.showAlert(
+                "❌ Недостаточно токенов!\n\n" +
+                "Нужно: " +
+                price +
+                " 🪙\n" +
+                "Баланс: " +
+                balance +
+                " 🪙"
             );
 
-        const position =
-            -(random * 108);
+            return;
 
-        track.style.transition =
-            "transform 3s cubic-bezier(.15,.8,.2,1)";
+        }
 
-        track.style.transform =
-            "translateX(" + position + "px)";
 
-        result.innerText =
-            "🎰 Рулетка крутится...";
+        balance -= price;
 
-        setTimeout(() => {
+        updateBalance();
 
-            const names = [
-                "USP",
-                "AKR12",
-                "M4A1",
-                "AWM",
-                "Dragon",
-                "Golden"
-            ];
 
-            result.innerText =
-                "🎉 Ты выиграл: " +
-                names[random] +
-                "!";
-
-        }, 3100);
+        tg.showAlert(
+            "✅ Покупка успешна!\n\n" +
+            "🎮 " +
+            name +
+            "\n" +
+            "🪙 Цена: " +
+            price +
+            "\n\n" +
+            "Скин добавлен в покупки."
+        );
 
     }
+
+
+    updateBalance();
 
 </script>
 
