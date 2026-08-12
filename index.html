@@ -1,854 +1,785 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    >
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>STANDOFF MARKET</title>
+<title>STANDOFF MARKET</title>
 
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-    <style>
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+<style>
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
 
-        body {
-            margin: 0;
-            background:
-                radial-gradient(circle at 20% 0%, #24204a 0%, transparent 35%),
-                radial-gradient(circle at 100% 30%, #35144f 0%, transparent 35%),
-                #090911;
-            color: #ffffff;
-            font-family: Arial, sans-serif;
-            min-height: 100vh;
-        }
+body {
+    margin: 0;
+    background:
+        radial-gradient(circle at 20% 0%, #24204a 0%, transparent 35%),
+        radial-gradient(circle at 100% 30%, #35144f 0%, transparent 35%),
+        #090911;
+    color: white;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+}
 
-        button {
-            font-family: Arial, sans-serif;
-            cursor: pointer;
-        }
+button {
+    font-family: Arial, sans-serif;
+    cursor: pointer;
+}
 
-        .app {
-            max-width: 520px;
-            margin: 0 auto;
-            padding: 18px 16px 35px;
-        }
+.app {
+    max-width: 520px;
+    margin: auto;
+    padding: 18px 16px 35px;
+}
 
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 18px;
-        }
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
-        .logo-icon {
-            width: 46px;
-            height: 46px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #7b4dff, #b84dff);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 23px;
-            box-shadow: 0 8px 25px rgba(135, 75, 255, 0.35);
-        }
+.logo-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: linear-gradient(135deg,#7b4dff,#b84dff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 23px;
+}
 
-        .logo-title {
-            font-size: 17px;
-            font-weight: 800;
-        }
+.logo-title {
+    font-size: 17px;
+    font-weight: 800;
+}
 
-        .logo-subtitle {
-            font-size: 11px;
-            color: #8d8d9d;
-            margin-top: 3px;
-        }
+.logo-subtitle {
+    font-size: 11px;
+    color: #8d8d9d;
+    margin-top: 3px;
+}
 
-        .balance {
-            background: rgba(255,255,255,0.07);
-            border: 1px solid rgba(255,255,255,0.08);
-            padding: 10px 13px;
-            border-radius: 14px;
-            font-weight: 700;
-            font-size: 14px;
-        }
+.balance {
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.08);
+    padding: 10px 13px;
+    border-radius: 14px;
+    font-weight: 700;
+}
 
-        .welcome {
-            background: linear-gradient(
-                135deg,
-                rgba(116, 72, 255, 0.30),
-                rgba(184, 67, 255, 0.12)
-            );
+.welcome {
+    background: linear-gradient(
+        135deg,
+        rgba(116,72,255,.30),
+        rgba(184,67,255,.12)
+    );
+    border: 1px solid rgba(160,100,255,.25);
+    border-radius: 24px;
+    padding: 22px;
+    margin-bottom: 18px;
+}
 
-            border: 1px solid rgba(160,100,255,0.25);
-            border-radius: 24px;
-            padding: 22px;
-            margin-bottom: 18px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
-        }
+.welcome h1 {
+    margin: 0 0 8px;
+    font-size: 26px;
+}
 
-        .welcome h1 {
-            margin: 0 0 8px;
-            font-size: 26px;
-        }
+.welcome p {
+    margin: 0;
+    color: #b8b8c7;
+    line-height: 1.45;
+    font-size: 14px;
+}
 
-        .welcome p {
-            margin: 0;
-            color: #b8b8c7;
-            line-height: 1.45;
-            font-size: 14px;
-        }
+.nav {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
 
-        .nav {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+.nav button {
+    border: 0;
+    color: white;
+    background: rgba(255,255,255,.075);
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: 17px;
+    padding: 17px 10px;
+    font-size: 14px;
+    font-weight: 700;
+}
 
-        .nav button {
-            border: 0;
-            color: white;
-            background: rgba(255,255,255,0.075);
-            border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 17px;
-            padding: 17px 10px;
-            font-size: 14px;
-            font-weight: 700;
-        }
+.nav .roulette {
+    background: linear-gradient(135deg,#713dff,#a13fff);
+}
 
-        .nav button:active {
-            transform: scale(0.97);
-        }
+.section-title {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
 
-        .nav .roulette {
-            background: linear-gradient(135deg, #713dff, #a13fff);
-        }
+.section-title h2 {
+    margin: 0;
+    font-size: 19px;
+}
 
-        .section-title {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
+.skins {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 11px;
+}
 
-        .section-title h2 {
-            margin: 0;
-            font-size: 19px;
-        }
+.skin {
+    background: rgba(255,255,255,.055);
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: 18px;
+    padding: 12px;
+}
 
-        .section-title span {
-            color: #8c8c9c;
-            font-size: 12px;
-        }
+.skin-image {
+    height: 105px;
+    border-radius: 14px;
+    background:
+        radial-gradient(circle,rgba(145,75,255,.35),transparent 55%),
+        #11111c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 43px;
+    margin-bottom: 10px;
+}
 
-        .skins {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 11px;
-        }
+.skin-name {
+    font-size: 14px;
+    font-weight: 700;
+}
 
-        .skin {
-            background: rgba(255,255,255,0.055);
-            border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 18px;
-            padding: 12px;
-        }
+.skin-type {
+    color: #8d8d9b;
+    font-size: 11px;
+    margin-top: 4px;
+}
 
-        .skin-image {
-            height: 105px;
-            border-radius: 14px;
-            background:
-                radial-gradient(circle, rgba(145,75,255,0.35), transparent 55%),
-                #11111c;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 43px;
-            margin-bottom: 10px;
-        }
+.skin-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+}
 
-        .skin-name {
-            font-size: 14px;
-            font-weight: 700;
-        }
+.price {
+    font-size: 14px;
+    font-weight: 800;
+}
 
-        .skin-type {
-            color: #8d8d9b;
-            font-size: 11px;
-            margin-top: 4px;
-        }
+.buy {
+    border: 0;
+    border-radius: 10px;
+    padding: 8px 11px;
+    background: #7b4dff;
+    color: white;
+    font-weight: 700;
+}
 
-        .skin-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 12px;
-        }
+.roulette-box {
+    display: none;
+    margin-top: 20px;
+    background: rgba(255,255,255,.055);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 23px;
+    padding: 18px;
+    overflow: hidden;
+}
 
-        .price {
-            font-size: 14px;
-            font-weight: 800;
-        }
+.roulette-box.active {
+    display: block;
+}
 
-        .buy {
-            border: 0;
-            border-radius: 10px;
-            padding: 8px 11px;
-            background: #7b4dff;
-            color: white;
-            font-weight: 700;
-            font-size: 11px;
-        }
+.roulette-title {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 800;
+}
 
-        .roulette-box {
-            display: none;
-            background: rgba(255,255,255,0.055);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 23px;
-            padding: 18px;
-            margin-top: 18px;
-            overflow: hidden;
-        }
+.roulette-subtitle {
+    text-align: center;
+    color: #8f8f9d;
+    font-size: 12px;
+    margin: 6px 0 18px;
+}
 
-        .roulette-box.active {
-            display: block;
-        }
+.roulette-window {
+    position: relative;
+    overflow: hidden;
+    border-radius: 17px;
+    border: 1px solid rgba(255,255,255,.1);
+    background: #0d0d16;
+}
 
-        .roulette-title {
-            text-align: center;
-            font-size: 20px;
-            font-weight: 800;
-            margin-bottom: 5px;
-        }
+.roulette-pointer {
+    position: absolute;
+    z-index: 5;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 3px;
+    background: #a66bff;
+    box-shadow: 0 0 15px #9c58ff;
+    transform: translateX(-50%);
+}
 
-        .roulette-subtitle {
-            text-align: center;
-            color: #8f8f9d;
-            font-size: 12px;
-            margin-bottom: 18px;
-        }
+.roulette-track {
+    display: flex;
+    gap: 8px;
+    padding: 10px;
+    transform: translateX(0);
+    will-change: transform;
+}
 
-        .roulette-window {
-            position: relative;
-            overflow: hidden;
-            border-radius: 17px;
-            border: 1px solid rgba(255,255,255,0.1);
-            background: #0d0d16;
-        }
+.roulette-item {
+    flex: 0 0 100px;
+    height: 100px;
+    border-radius: 14px;
+    background: #171722;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+}
 
-        .roulette-pointer {
-            position: absolute;
-            z-index: 5;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            width: 3px;
-            background: #a66bff;
-            box-shadow: 0 0 15px #9c58ff;
-            transform: translateX(-50%);
-        }
+.roulette-item span {
+    font-size: 35px;
+    margin-bottom: 5px;
+}
 
-        .roulette-track {
-            display: flex;
-            gap: 8px;
-            padding: 10px;
-            transform: translateX(0);
-            will-change: transform;
-        }
+.spin {
+    width: 100%;
+    margin-top: 15px;
+    padding: 15px;
+    border: 0;
+    border-radius: 15px;
+    background: linear-gradient(135deg,#7547ff,#b044ff);
+    color: white;
+    font-size: 15px;
+    font-weight: 800;
+}
 
-        .roulette-item {
-            flex: 0 0 100px;
-            height: 100px;
-            border-radius: 14px;
-            background: #171722;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 700;
-            border: 1px solid rgba(255,255,255,0.06);
-        }
+.spin:disabled {
+    opacity: .5;
+}
 
-        .roulette-item span {
-            font-size: 35px;
-            margin-bottom: 5px;
-        }
+.result {
+    text-align: center;
+    margin-top: 14px;
+    color: #c7a7ff;
+    font-weight: 700;
+    min-height: 25px;
+}
 
-        .spin {
-            width: 100%;
-            margin-top: 15px;
-            padding: 15px;
-            border: 0;
-            border-radius: 15px;
-            background: linear-gradient(135deg, #7547ff, #b044ff);
-            color: white;
-            font-size: 15px;
-            font-weight: 800;
-        }
-
-        .spin:disabled {
-            opacity: 0.5;
-        }
-
-        .spin:active {
-            transform: scale(0.98);
-        }
-
-        .result {
-            text-align: center;
-            margin-top: 14px;
-            color: #c7a7ff;
-            font-weight: 700;
-            min-height: 20px;
-            line-height: 1.4;
-        }
-
-        .footer {
-            text-align: center;
-            color: #555563;
-            font-size: 11px;
-            margin-top: 30px;
-        }
-    </style>
+.footer {
+    text-align: center;
+    color: #555563;
+    font-size: 11px;
+    margin-top: 30px;
+}
+</style>
 </head>
 
 <body>
 
 <div class="app">
 
-    <header class="header">
+<header class="header">
 
-        <div class="logo">
+<div class="logo">
 
-            <div class="logo-icon">
-                🎮
-            </div>
+<div class="logo-icon">🎮</div>
 
-            <div>
-                <div class="logo-title">
-                    STANDOFF MARKET
-                </div>
+<div>
+<div class="logo-title">STANDOFF MARKET</div>
+<div class="logo-subtitle">MARKET • SKINS • ROULETTE</div>
+</div>
 
-                <div class="logo-subtitle">
-                    MARKET • SKINS • ROULETTE
-                </div>
-            </div>
+</div>
 
-        </div>
+<div class="balance" id="balance">
+🪙 ...
+</div>
 
-        <div class="balance" id="balance">
-            🪙 650
-        </div>
+</header>
 
-    </header>
 
+<section class="welcome">
 
-    <section class="welcome">
+<h1>Добро пожаловать 👋</h1>
 
-        <h1>
-            Добро пожаловать 👋
-        </h1>
+<p>
+Покупай скины, участвуй в рулетках
+и собирай свою коллекцию.
+</p>
 
-        <p>
-            Покупай скины, участвуй в рулетках
-            и собирай свою коллекцию.
-        </p>
+</section>
 
-    </section>
 
+<nav class="nav">
 
-    <nav class="nav">
+<button onclick="showMarket()">🛒 Магазин</button>
 
-        <button onclick="showMarket()">
-            🛒 Магазин
-        </button>
+<button class="roulette" onclick="showRoulette()">
+🎰 Рулетка
+</button>
 
-        <button onclick="showRoulette()" class="roulette">
-            🎰 Рулетка
-        </button>
+<button onclick="showProfile()">👤 Профиль</button>
 
-        <button onclick="showProfile()">
-            👤 Профиль
-        </button>
+<button onclick="showPurchases()">📦 Покупки</button>
 
-        <button onclick="showPurchases()">
-            📦 Покупки
-        </button>
+</nav>
 
-    </nav>
 
+<section id="market">
 
-    <section id="market">
+<div class="section-title">
 
-        <div class="section-title">
+<h2>🔥 Популярные скины</h2>
 
-            <h2>
-                🔥 Популярные скины
-            </h2>
+</div>
 
-            <span>
-                Все →
-            </span>
+<div id="skins" class="skins"></div>
 
-        </div>
+</section>
 
 
-        <div class="skins">
+<section id="roulette" class="roulette-box">
 
-            <div class="skin">
+<div class="roulette-title">
+🎰 STANDOFF ROULETTE
+</div>
 
-                <div class="skin-image">
-                    🔥
-                </div>
+<div class="roulette-subtitle">
+Стоимость вращения — 30 🪙
+</div>
 
-                <div class="skin-name">
-                    AKR12 Dragon
-                </div>
+<div class="roulette-window">
 
-                <div class="skin-type">
-                    Legendary
-                </div>
+<div class="roulette-pointer"></div>
 
-                <div class="skin-bottom">
+<div id="rouletteTrack" class="roulette-track"></div>
 
-                    <div class="price">
-                        🪙 350
-                    </div>
+</div>
 
-                    <button
-                        class="buy"
-                        onclick="buySkin('AKR12 Dragon', 350)"
-                    >
-                        Купить
-                    </button>
+<button
+id="spinButton"
+class="spin"
+onclick="spinRoulette()"
+>
+🎰 КРУТИТЬ — 30 🪙
+</button>
 
-                </div>
+<div id="result" class="result"></div>
 
-            </div>
+</section>
 
 
-            <div class="skin">
-
-                <div class="skin-image">
-                    💎
-                </div>
-
-                <div class="skin-name">
-                    M4A1 Crystal
-                </div>
-
-                <div class="skin-type">
-                    Epic
-                </div>
-
-                <div class="skin-bottom">
-
-                    <div class="price">
-                        🪙 500
-                    </div>
-
-                    <button
-                        class="buy"
-                        onclick="buySkin('M4A1 Crystal', 500)"
-                    >
-                        Купить
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <div class="skin">
-
-                <div class="skin-image">
-                    ⚡
-                </div>
-
-                <div class="skin-name">
-                    USP Cyber
-                </div>
-
-                <div class="skin-type">
-                    Rare
-                </div>
-
-                <div class="skin-bottom">
-
-                    <div class="price">
-                        🪙 250
-                    </div>
-
-                    <button
-                        class="buy"
-                        onclick="buySkin('USP Cyber', 250)"
-                    >
-                        Купить
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <div class="skin">
-
-                <div class="skin-image">
-                    🌌
-                </div>
-
-                <div class="skin-name">
-                    AWM Galaxy
-                </div>
-
-                <div class="skin-type">
-                    Legendary
-                </div>
-
-                <div class="skin-bottom">
-
-                    <div class="price">
-                        🪙 750
-                    </div>
-
-                    <button
-                        class="buy"
-                        onclick="buySkin('AWM Galaxy', 750)"
-                    >
-                        Купить
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <section id="roulette" class="roulette-box">
-
-        <div class="roulette-title">
-            🎰 STANDOFF ROULETTE
-        </div>
-
-        <div class="roulette-subtitle">
-            Испытай удачу и получи случайный скин
-        </div>
-
-
-        <div class="roulette-window">
-
-            <div class="roulette-pointer"></div>
-
-            <div
-                id="rouletteTrack"
-                class="roulette-track"
-            ></div>
-
-        </div>
-
-
-        <button
-            id="spinButton"
-            class="spin"
-            onclick="spinRoulette()"
-        >
-            🎰 КРУТИТЬ — 30 🪙
-        </button>
-
-        <div
-            id="result"
-            class="result"
-        ></div>
-
-    </section>
-
-
-    <div class="footer">
-        STANDOFF MARKET © 2026
-    </div>
+<div class="footer">
+STANDOFF MARKET © 2026
+</div>
 
 </div>
 
 
 <script>
 
-    const tg =
-        window.Telegram.WebApp;
+const tg = window.Telegram.WebApp;
 
-    tg.ready();
-    tg.expand();
-
-
-    // =========================
-    // ТЕСТОВЫЙ БАЛАНС
-    // =========================
-
-    let balance = 650;
+tg.ready();
+tg.expand();
 
 
-    function updateBalance() {
+/* =========================================
+   API
+========================================= */
 
-        document.getElementById(
-            "balance"
-        ).innerText =
-            "🪙 " + balance;
+const API_URL =
+    "https://standoff-market-api.onrender.com";
+
+
+let userData = null;
+let spinning = false;
+
+
+/* =========================================
+   API ЗАПРОС
+========================================= */
+
+async function apiRequest(
+    path,
+    options = {}
+) {
+
+    const headers = {
+        "Content-Type": "application/json",
+        "X-Telegram-Init-Data":
+            tg.initData
+    };
+
+    const response =
+        await fetch(
+            API_URL + path,
+            {
+                ...options,
+                headers
+            }
+        );
+
+    const data =
+        await response.json();
+
+    if (!response.ok) {
+        throw new Error(
+            data.error ||
+            "Ошибка сервера"
+        );
+    }
+
+    return data;
+}
+
+
+/* =========================================
+   ЗАГРУЗКА ПОЛЬЗОВАТЕЛЯ
+========================================= */
+
+async function loadUser() {
+
+    try {
+
+        const data =
+            await apiRequest(
+                "/api/me"
+            );
+
+        userData = data;
+
+        updateBalance(
+            data.balance
+        );
+
+        renderSkins(
+            data.skins
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        tg.showAlert(
+            "❌ Не удалось подключиться к серверу.\n\n" +
+            error.message
+        );
 
     }
 
+}
 
-    // =========================
-    // СКИНЫ РУЛЕТКИ
-    // =========================
 
-    const rouletteSkins = [
+/* =========================================
+   БАЛАНС
+========================================= */
 
-        {
-            name: "USP Cyber",
-            icon: "⚡",
-            chance: 35
-        },
+function updateBalance(
+    value
+) {
 
-        {
-            name: "AKR12 Dragon",
-            icon: "🔥",
-            chance: 25
-        },
+    document
+        .getElementById("balance")
+        .innerText =
+        "🪙 " + value;
 
-        {
-            name: "M4A1 Crystal",
-            icon: "💎",
-            chance: 20
-        },
+}
 
-        {
-            name: "AWM Galaxy",
-            icon: "🌌",
-            chance: 12
-        },
 
-        {
-            name: "Golden",
-            icon: "👑",
-            chance: 6
-        },
+/* =========================================
+   МАГАЗИН
+========================================= */
 
-        {
-            name: "Dragon",
-            icon: "🐉",
-            chance: 2
+function renderSkins(
+    skins
+) {
+
+    const container =
+        document.getElementById(
+            "skins"
+        );
+
+    container.innerHTML = "";
+
+    skins.forEach(
+        skin => {
+
+            const element =
+                document.createElement(
+                    "div"
+                );
+
+            element.className =
+                "skin";
+
+            element.innerHTML = `
+
+                <div class="skin-image">
+                    ${skin.icon}
+                </div>
+
+                <div class="skin-name">
+                    ${skin.name}
+                </div>
+
+                <div class="skin-type">
+                    ${skin.type}
+                </div>
+
+                <div class="skin-bottom">
+
+                    <div class="price">
+                        🪙 ${skin.price}
+                    </div>
+
+                    <button
+                        class="buy"
+                        onclick="buySkin('${escapeText(skin.name)}')"
+                    >
+                        Купить
+                    </button>
+
+                </div>
+            `;
+
+            container.appendChild(
+                element
+            );
+
         }
+    );
 
-    ];
+}
 
+
+/* =========================================
+   ПОКУПКА
+========================================= */
+
+async function buySkin(
+    skinName
+) {
+
+    try {
+
+        const data =
+            await apiRequest(
+                "/api/buy",
+                {
+                    method: "POST",
+
+                    body: JSON.stringify({
+                        skin: skinName
+                    })
+                }
+            );
+
+        updateBalance(
+            data.balance
+        );
+
+        tg.showAlert(
+            "✅ Покупка успешна!\n\n" +
+            data.skin.icon +
+            " " +
+            data.skin.name
+        );
+
+    } catch (error) {
+
+        tg.showAlert(
+            "❌ " +
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   РУЛЕТКА
+========================================= */
+
+function showRoulette() {
+
+    const roulette =
+        document.getElementById(
+            "roulette"
+        );
+
+    roulette.classList.add(
+        "active"
+    );
+
+    roulette.scrollIntoView({
+        behavior: "smooth"
+    });
+
+}
+
+
+function createRoulette(
+    skins
+) {
 
     const track =
         document.getElementById(
             "rouletteTrack"
         );
 
+    track.innerHTML = "";
 
-    function createRoulette() {
+    for (
+        let i = 0;
+        i < 60;
+        i++
+    ) {
 
-        track.innerHTML = "";
+        const skin =
+            skins[
+                i % skins.length
+            ];
 
-        for (
-            let i = 0;
-            i < 40;
-            i++
-        ) {
+        const item =
+            document.createElement(
+                "div"
+            );
 
-            const skin =
-                rouletteSkins[
-                    i %
-                    rouletteSkins.length
-                ];
+        item.className =
+            "roulette-item";
 
+        item.innerHTML =
+            `
+            <span>${skin.icon}</span>
+            ${skin.name}
+            `;
 
-            const item =
-                document.createElement(
-                    "div"
-                );
-
-
-            item.className =
-                "roulette-item";
-
-
-            item.innerHTML =
-                "<span>" +
-                skin.icon +
-                "</span>" +
-                skin.name;
-
-
-            track.appendChild(item);
-
-        }
+        track.appendChild(
+            item
+        );
 
     }
 
+}
 
-    createRoulette();
+
+/* =========================================
+   SPIN
+========================================= */
+
+async function spinRoulette() {
+
+    if (spinning) {
+        return;
+    }
+
+    spinning = true;
+
+    const button =
+        document.getElementById(
+            "spinButton"
+        );
+
+    const result =
+        document.getElementById(
+            "result"
+        );
+
+    button.disabled = true;
+
+    result.innerText =
+        "🎰 Рулетка крутится...";
 
 
-    // =========================
-    // ВЫБОР ПО ШАНСУ
-    // =========================
+    try {
 
-    function getRandomSkin() {
-
-        const total =
-            rouletteSkins.reduce(
-                (
-                    sum,
-                    skin
-                ) =>
-                    sum +
-                    skin.chance,
-                0
+        const data =
+            await apiRequest(
+                "/api/spin",
+                {
+                    method: "POST"
+                }
             );
 
 
-        let random =
-            Math.random() *
-            total;
+        updateBalance(
+            data.balance
+        );
+
+
+        const items =
+            document.querySelectorAll(
+                ".roulette-item"
+            );
+
+
+        const winningName =
+            data.skin.name;
+
+
+        let targetIndex = -1;
 
 
         for (
-            const skin
-            of rouletteSkins
+            let i = items.length - 1;
+            i >= 0;
+            i--
         ) {
 
-            random -=
-                skin.chance;
-
-
             if (
-                random <= 0
+                items[i].innerText
+                    .trim()
+                    .includes(
+                        winningName
+                    )
             ) {
 
-                return skin;
+                targetIndex = i;
+
+                break;
 
             }
 
         }
 
 
-        return rouletteSkins[0];
-
-    }
-
-
-    let spinning = false;
-
-
-    // =========================
-    // РУЛЕТКА
-    // =========================
-
-    function spinRoulette() {
-
-        if (spinning) {
-            return;
-        }
-
-
-        const price = 30;
-
-
         if (
-            balance <
-            price
+            targetIndex === -1
         ) {
 
-            tg.showAlert(
-                "❌ Недостаточно токенов!\n\n" +
-                "Для рулетки нужно 30 🪙.\n" +
-                "Твой баланс: " +
-                balance +
-                " 🪙."
+            throw new Error(
+                "Скин не найден в рулетке"
             );
-
-            return;
 
         }
-
-
-        spinning = true;
-
-
-        const button =
-            document.getElementById(
-                "spinButton"
-            );
-
-
-        const result =
-            document.getElementById(
-                "result"
-            );
-
-
-        button.disabled = true;
-
-
-        balance -= price;
-
-        updateBalance();
-
-
-        result.innerText =
-            "🎰 Рулетка крутится...";
-
-
-        const winningSkin =
-            getRandomSkin();
-
-
-        const matchingItems =
-            Array.from(
-                track.children
-            ).filter(
-                item =>
-                    item.innerText ===
-                    winningSkin.name
-            );
-
-
-        const target =
-            matchingItems[
-                Math.floor(
-                    Math.random() *
-                    matchingItems.length
-                )
-            ];
-
-
-        const targetIndex =
-            Array.from(
-                track.children
-            ).indexOf(
-                target
-            );
-
-
-        const itemWidth = 108;
 
 
         const windowElement =
@@ -856,6 +787,8 @@
                 ".roulette-window"
             );
 
+
+        const itemWidth = 108;
 
         const center =
             windowElement.offsetWidth /
@@ -873,6 +806,12 @@
             targetCenter;
 
 
+        const track =
+            document.getElementById(
+                "rouletteTrack"
+            );
+
+
         track.style.transition =
             "transform 4.5s cubic-bezier(.12,.75,.18,1)";
 
@@ -888,19 +827,15 @@
 
                 result.innerHTML =
                     "🎉 Ты выиграл:<br>" +
-                    winningSkin.icon +
+                    data.skin.icon +
                     " <b>" +
-                    winningSkin.name +
+                    data.skin.name +
                     "</b>";
 
+                spinning = false;
 
                 button.disabled =
                     false;
-
-
-                spinning =
-                    false;
-
 
                 if (
                     tg.HapticFeedback
@@ -917,118 +852,158 @@
             4700
         );
 
-    }
 
+    } catch (error) {
 
-    // =========================
-    // МЕНЮ
-    // =========================
+        result.innerText = "";
 
-    function showRoulette() {
+        button.disabled =
+            false;
 
-        const roulette =
-            document.getElementById(
-                "roulette"
-            );
-
-
-        roulette.classList.add(
-            "active"
-        );
-
-
-        roulette.scrollIntoView({
-            behavior: "smooth"
-        });
-
-    }
-
-
-    function showMarket() {
-
-        document
-            .getElementById(
-                "market"
-            )
-            .scrollIntoView({
-                behavior: "smooth"
-            });
-
-    }
-
-
-    function showProfile() {
+        spinning = false;
 
         tg.showAlert(
-            "👤 Профиль\n\n" +
-            "🪙 Баланс: " +
-            balance +
-            "\n\n" +
-            "Профиль подключим к Telegram на следующем этапе."
+            "❌ " +
+            error.message
         );
 
     }
 
+}
 
-    function showPurchases() {
+
+/* =========================================
+   ПРОФИЛЬ
+========================================= */
+
+function showProfile() {
+
+    if (!userData) {
+        return;
+    }
+
+    tg.showAlert(
+        "👤 Профиль\n\n" +
+        "🆔 ID: " +
+        userData.user.id +
+        "\n\n" +
+        "👤 " +
+        userData.user.name +
+        "\n\n" +
+        "🪙 Баланс: " +
+        userData.balance
+    );
+
+}
+
+
+/* =========================================
+   ПОКУПКИ
+========================================= */
+
+function showPurchases() {
+
+    if (!userData) {
+        return;
+    }
+
+    if (
+        !userData.purchases ||
+        userData.purchases.length === 0
+    ) {
 
         tg.showAlert(
             "📦 Покупки\n\n" +
-            "Здесь будут отображаться купленные скины."
+            "Покупок пока нет."
         );
+
+        return;
 
     }
 
 
-    // =========================
-    // ПОКУПКА
-    // =========================
+    let text =
+        "📦 МОИ ПОКУПКИ\n\n";
 
-    function buySkin(
-        name,
-        price
-    ) {
 
-        if (
-            balance <
-            price
-        ) {
+    userData.purchases.forEach(
+        item => {
 
-            tg.showAlert(
-                "❌ Недостаточно токенов!\n\n" +
-                "Нужно: " +
-                price +
-                " 🪙\n" +
-                "Баланс: " +
-                balance +
-                " 🪙"
-            );
-
-            return;
+            text +=
+                "🎨 " +
+                item.name +
+                " — " +
+                item.price +
+                " 🪙\n";
 
         }
+    );
 
 
-        balance -= price;
+    tg.showAlert(
+        text
+    );
 
-        updateBalance();
+}
 
 
-        tg.showAlert(
-            "✅ Покупка успешна!\n\n" +
-            "🎮 " +
-            name +
-            "\n" +
-            "🪙 Цена: " +
-            price +
-            "\n\n" +
-            "Скин добавлен в покупки."
+/* =========================================
+   МАГАЗИН
+========================================= */
+
+function showMarket() {
+
+    document
+        .getElementById(
+            "market"
+        )
+        .scrollIntoView({
+            behavior: "smooth"
+        });
+
+}
+
+
+/* =========================================
+   ЭКРАНИРОВАНИЕ
+========================================= */
+
+function escapeText(
+    text
+) {
+
+    return text
+        .replace(
+            /'/g,
+            "\\'"
+        );
+
+}
+
+
+/* =========================================
+   ЗАПУСК
+========================================= */
+
+async function start() {
+
+    await loadUser();
+
+    if (
+        userData &&
+        userData.skins
+    ) {
+
+        createRoulette(
+            userData.skins
         );
 
     }
 
+}
 
-    updateBalance();
+
+start();
 
 </script>
 
